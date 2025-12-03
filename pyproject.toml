@@ -1,0 +1,23 @@
+[project]
+name = "cyrill"
+version = "0.1.0"
+description = "Cyrillic handwriting recognition project"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "dvc>=3.64.1",
+    "keras>=3.12.0",
+    "matplotlib>=3.10.7",
+    "mlflow>=3.6.0",
+    "numpy>=2.3.5",
+    "opencv-python>=4.11.0.86",
+    "pandas>=2.3.3",
+    "plotly>=6.5.0",
+    "scikit-image>=0.25.2",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.16.3",
+    "tensorflow>=2.20.0",
+    "torch>=2.9.1",
+    "torchvision>=0.24.1",
+    "tqdm>=4.67.1",
+]
