@@ -42,41 +42,34 @@ class ScaleAugmentation(BaseAugmentation):
         """
         Применить масштабирование к изображению.
         """
+
         scale = params["scale"]
 
-        # Приводим изображение к numpy
         is_pil = isinstance(image, Image.Image)
         if is_pil:
             image_np = np.array(image)
         else:
             image_np = image
 
-        height, width = image_np.shape[:2]
+        h, w = image_np.shape[:2]
 
-        # Центр изображения, относительно которого масштабируем
-        center_x = width / 2
-        center_y = height / 2
+        new_h = int(h * scale)
+        new_w = int(w * scale)
 
-        # Матрица масштабирования вокруг центра
-        M = np.array(
-            [
-                [scale, 0, (1 - scale) * center_x],
-                [0, scale, (1 - scale) * center_y],
-            ],
-            dtype=np.float32,
-        )
+        resized = cv2.resize(image_np, (new_w, new_h))
 
-        # Применяем affine-преобразование
-        scaled = cv2.warpAffine(
-            image_np,
-            M,
-            (width, height),
-            flags=cv2.INTER_LINEAR,
-            borderMode=cv2.BORDER_REFLECT_101,
-        )
+        canvas = np.ones((h, w), dtype=image_np.dtype) * 255  # white background
 
-        # Возвращаем тип изображения в исходном формате
-        if is_pil:
-            return Image.fromarray(scaled)
+        # если увеличили — центрируем и обрезаем
+        if scale >= 1:
+            start_y = (new_h - h) // 2
+            start_x = (new_w - w) // 2
+            result = resized[start_y:start_y+h, start_x:start_x+w]
+        else:
+            # если уменьшили — паддинг
+            start_y = (h - new_h) // 2
+            start_x = (w - new_w) // 2
+            canvas[start_y:start_y+new_h, start_x:start_x+new_w] = resized
+            result = canvas
 
-        return scaled
+        return Image.fromarray(result) if is_pil else result
