@@ -18,12 +18,13 @@ class ScaleAugmentation(BaseAugmentation):
 
     name = "scale"
 
-    def __init__(self, scale_range: tuple[float, float] = (0.9, 1.2)):
+    def __init__(self, scale_range: tuple[float, float] = (0.8, 1.0)):
         """
         Args:
             scale_range - Диапазон масштабирования.
                 Значение выбирается случайно из этого диапазона
                 при каждом применении аугментации.
+                Нет, смысла передавать что-то больше 1, тк вернется оригинал.
         """
         self.scale_range = scale_range
 
@@ -53,23 +54,26 @@ class ScaleAugmentation(BaseAugmentation):
 
         h, w = image_np.shape[:2]
 
+        if scale >= 1.0:
+            return image if is_pil else image_np
+
         new_h = int(h * scale)
         new_w = int(w * scale)
 
-        resized = cv2.resize(image_np, (new_w, new_h))
+        resized = cv2.resize(
+            image_np,
+            (new_w, new_h),
+            interpolation=cv2.INTER_LINEAR,
+        )
 
-        canvas = np.ones((h, w), dtype=image_np.dtype) * 255  # white background
+        if image_np.ndim == 2:  # grayscale
+            canvas = np.full((h, w), 255, dtype=image_np.dtype)
+        else:  # RGB
+            canvas = np.full((h, w, image_np.shape[2]), 255, dtype=image_np.dtype)
 
-        # если увеличили — центрируем и обрезаем
-        if scale >= 1:
-            start_y = (new_h - h) // 2
-            start_x = (new_w - w) // 2
-            result = resized[start_y:start_y+h, start_x:start_x+w]
-        else:
-            # если уменьшили — паддинг
-            start_y = (h - new_h) // 2
-            start_x = (w - new_w) // 2
-            canvas[start_y:start_y+new_h, start_x:start_x+new_w] = resized
-            result = canvas
+        start_y = (h - new_h) // 2
+        start_x = (w - new_w) // 2
 
-        return Image.fromarray(result) if is_pil else result
+        canvas[start_y:start_y + new_h, start_x:start_x + new_w] = resized
+
+        return Image.fromarray(canvas) if is_pil else canvas
