@@ -9,6 +9,7 @@ from PIL import Image
 from .base import BaseAugmentation
 from .scale import ScaleAugmentation
 
+
 class ShearAugmentation(BaseAugmentation):
     """
     Аугментация shear (сдвиг) по оси X и/или Y.
