@@ -93,14 +93,15 @@ class ShearAugmentation(BaseAugmentation):
                       [A[1, 0], A[1, 1], ty]], dtype=np.float32)
 
         # Добавляем уменьшение изображения, чтобы избежать выхода за границы
-        scaled_img = self.scaler(image)
+        scaled_img, _ = self.scaler(image)
 
         sheared = cv2.warpAffine(
             scaled_img,
             M,
             (w, h),
             flags=cv2.INTER_LINEAR,
-            borderMode=cv2.BORDER_REFLECT_101,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=255
         )
 
         if is_pil:
