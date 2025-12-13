@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 
 from .base import BaseAugmentation
-
+from .scale import ScaleAugmentation
 
 class ShearAugmentation(BaseAugmentation):
     """
@@ -27,6 +27,7 @@ class ShearAugmentation(BaseAugmentation):
         """
         self.shear_x_range = shear_x_range
         self.shear_y_range = shear_y_range
+        self.scaler = ScaleAugmentation(scale_range=(0.7, 0.8))
 
         if shear_x_range is None and shear_y_range is None:
             raise ValueError("At least one of shear_x_range or shear_y_range must be specified") # noqa
@@ -91,8 +92,11 @@ class ShearAugmentation(BaseAugmentation):
         M = np.array([[A[0, 0], A[0, 1], tx],
                       [A[1, 0], A[1, 1], ty]], dtype=np.float32)
 
+        # Добавляем уменьшение изображения, чтобы избежать выхода за границы
+        scaled_img = self.scaler(image)
+
         sheared = cv2.warpAffine(
-            image,
+            scaled_img,
             M,
             (w, h),
             flags=cv2.INTER_LINEAR,
