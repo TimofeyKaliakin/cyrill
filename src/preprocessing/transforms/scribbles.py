@@ -64,7 +64,7 @@ class ScribblesAugmentation(BaseAugmentation):
 
         transform = Scribbles(
             scribbles_type="lines",
-            scribbles_ink="random",
+            scribbles_ink="pencil",
             scribbles_location="random",
             scribbles_size_range=params["size"],
             scribbles_count_range=params["count"],
