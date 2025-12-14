@@ -34,6 +34,19 @@ class DilationAugmentation(BaseAugmentation):
         image: Image.Image | np.ndarray,
         params: Dict[str, Any]
     ) -> Image.Image | np.ndarray:
+
+        is_pil = isinstance(image, Image.Image)
+
+        if is_pil:
+            image = np.array(image)
+
+        kernel = params["kernel"]
+        iterations = params["iterations"]
+
+        image = cv2.dilate(image, kernel, iterations=iterations)
+
+        return Image.fromarray(image) if is_pil else image
+
         kernel = params["kernel"]
         iterations = params["iterations"]
         return cv2.dilate(image, kernel, iterations=iterations)

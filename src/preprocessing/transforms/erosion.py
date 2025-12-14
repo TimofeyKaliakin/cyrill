@@ -35,9 +35,16 @@ class ErosionAugmentation(BaseAugmentation):
         params: Dict[str, Any]
     ) -> Image.Image | np.ndarray:
 
+        is_pil = isinstance(image, Image.Image)
+
+        if is_pil:
+            image = np.array(image)
+
         kernal = params['kernal']
         iterations = params['iterations']
-        return cv2.erode(image, kernal, iterations)
+        image = cv2.erode(image, kernal, iterations)
+
+        return Image.fromarray(image) if is_pil else image
 
     def sample_params(self) -> Dict[str, Any]:
         h = random.uniform(*self.kernal_size_range)
