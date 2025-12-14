@@ -52,6 +52,6 @@ class ErosionAugmentation(BaseAugmentation):
         iterations = random.randint(*self.iterations_rnage)
 
         return {
-            "kernel": np.ones((h, w), np.uint8),
+            "kernal": np.ones((h, w), np.uint8),
             "iterations": iterations,
         }

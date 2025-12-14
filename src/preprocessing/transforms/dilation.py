@@ -40,10 +40,10 @@ class DilationAugmentation(BaseAugmentation):
         if is_pil:
             image = np.array(image)
 
-        kernel = params["kernel"]
+        kernal = params["kernal"]
         iterations = params["iterations"]
 
-        image = cv2.dilate(image, kernel, iterations=iterations)
+        image = cv2.dilate(image, kernal, iterations=iterations)
 
         return Image.fromarray(image) if is_pil else image
 
@@ -53,6 +53,6 @@ class DilationAugmentation(BaseAugmentation):
         iterations = random.randint(*self.iterations_range)
 
         return {
-            "kernel": np.ones((h, w), np.uint8),
+            "kernal": np.ones((h, w), np.uint8),
             "iterations": iterations,
         }
