@@ -6,8 +6,9 @@ from .griddistortion import GridDistortionAugmentation
 from .motion_blur import MotionBlurAugmentation
 from .elastic_transform import ElasticTransformAugmentation
 from .bad_photo_copy import BadPhotoCopyAugmentation
+from .watermark import WaterMarkAugmentation
 
 __all__ = ['ScaleAugmentation',  'ShearAugmentation', 'ErosionAugmentation',
            'DilationAugmentation', 'GridDistortionAugmentation',
            'MotionBlurAugmentation', 'ElasticTransformAugmentation',
-           'BadPhotoCopyAugmentation']
+           'BadPhotoCopyAugmentation', 'WaterMarkAugmentation']
