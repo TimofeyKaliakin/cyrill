@@ -18,7 +18,7 @@ class DilationAugmentation(BaseAugmentation):
 
     def __init__(
         self,
-        kernel_size_range: Tuple[int, int] = (3, 4),
+        kernal_size_range: Tuple[int, int] = (3, 4),
         iterations_range: Tuple[int, int] = (1, 3),
     ):
         """
@@ -26,7 +26,7 @@ class DilationAugmentation(BaseAugmentation):
             kernel_size_range: диапазон размеров ядра Tuple[int, int].
             iterations_range: диапазон количества итераций Tuple[int, int].
         """
-        self.kernel_size_range = kernel_size_range
+        self.kernal_size_range = kernal_size_range
         self.iterations_range = iterations_range
 
     def apply(
@@ -47,14 +47,10 @@ class DilationAugmentation(BaseAugmentation):
 
         return Image.fromarray(image) if is_pil else image
 
-        kernel = params["kernel"]
-        iterations = params["iterations"]
-        return cv2.dilate(image, kernel, iterations=iterations)
-
     def sample_params(self) -> Dict[str, Any]:
         h = random.randint(*self.kernal_size_range)
         w = random.randint(*self.kernal_size_range)
-        iterations = random.randint(*self.iterations_rnage)
+        iterations = random.randint(*self.iterations_range)
 
         return {
             "kernel": np.ones((h, w), np.uint8),
