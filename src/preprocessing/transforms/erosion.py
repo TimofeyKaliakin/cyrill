@@ -47,8 +47,11 @@ class ErosionAugmentation(BaseAugmentation):
         return Image.fromarray(image) if is_pil else image
 
     def sample_params(self) -> Dict[str, Any]:
-        h = random.uniform(*self.kernal_size_range)
-        w = random.uniform(*self.kernal_size_range)
+        h = random.randint(*self.kernal_size_range)
+        w = random.randint(*self.kernal_size_range)
+        iterations = random.randint(*self.iterations_rnage)
 
-        return {'kernal': np.ones((h, w), np.uint8),
-                'iterations': random.uniform(*self.iterations_rnage)}
+        return {
+            "kernel": np.ones((h, w), np.uint8),
+            "iterations": iterations,
+        }

@@ -52,9 +52,9 @@ class DilationAugmentation(BaseAugmentation):
         return cv2.dilate(image, kernel, iterations=iterations)
 
     def sample_params(self) -> Dict[str, Any]:
-        h = random.randint(*self.kernel_size_range)
-        w = random.randint(*self.kernel_size_range)
-        iterations = random.randint(*self.iterations_range)
+        h = random.randint(*self.kernal_size_range)
+        w = random.randint(*self.kernal_size_range)
+        iterations = random.randint(*self.iterations_rnage)
 
         return {
             "kernel": np.ones((h, w), np.uint8),
