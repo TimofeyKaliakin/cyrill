@@ -7,8 +7,10 @@ from .motion_blur import MotionBlurAugmentation
 from .elastic_transform import ElasticTransformAugmentation
 from .bad_photo_copy import BadPhotoCopyAugmentation
 from .watermark import WaterMarkAugmentation
+from .scribbles import ScribblesAugmentation
 
 __all__ = ['ScaleAugmentation',  'ShearAugmentation', 'ErosionAugmentation',
            'DilationAugmentation', 'GridDistortionAugmentation',
            'MotionBlurAugmentation', 'ElasticTransformAugmentation',
-           'BadPhotoCopyAugmentation', 'WaterMarkAugmentation']
+           'BadPhotoCopyAugmentation', 'WaterMarkAugmentation',
+           'ScribblesAugmentation']
