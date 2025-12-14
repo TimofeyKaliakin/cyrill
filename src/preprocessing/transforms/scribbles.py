@@ -63,7 +63,7 @@ class ScribblesAugmentation(BaseAugmentation):
             image = np.array(image)
 
         transform = Scribbles(
-            scribbles_type="random",
+            scribbles_type="lines",
             scribbles_ink="random",
             scribbles_location="random",
             scribbles_size_range=params["size"],
@@ -71,7 +71,7 @@ class ScribblesAugmentation(BaseAugmentation):
             scribbles_thickness_range=params["thickness"],
             scribbles_brightness_change=[params["brightness"]],
             scribbles_color="random",
-            scribbles_text="random",
+            scribbles_text=None,
             scribbles_text_font="random",
             scribbles_text_rotate_range=params["rotation"],
             p=1,
