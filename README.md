@@ -1,4 +1,106 @@
-# Image Augmentation Pipeline (OCR / Handwritten Text)
+# Распознавание рукописного текста на кириллице: сбор датасета и тестирование моделей
+
+Данный репозиторий является решением 1 кейса практикума 3 семестра магистратуры МФТИ.
+
+Состав команды:
+
+- Калякин Тимофей Сергеевич
+- Зубов Илья Леонидович
+- Фахретдинов Муса Шамилевич
+- Климов Игорь Игоревич
+- Агапов Константин Сергеевич
+
+Цель: создать и протестировать датасет для распознавания рукописного русского текста, который сможет стать частью системы автоматического парсинга данных из документов.
+
+В данном репозитории приведены все артефакты (в случае датасета - ссылка на него), созданные в рамках практикума командой. 
+Подробнее по каждому этапу работы можно ознакомится в данном документе, нажав на раскрывающийся блок. 
+
+
+<details>
+<summary><b><h2> Dataset </h2></b></summary>
+
+Собранный датасет можно увидет на https://huggingface.co/datasets/Timka28/cyrillic_small
+
+---
+
+## Общая статистика
+
+- **Всего образцов:** 37 831  
+- **Итоговые сплиты:** train — 32 299, test — 5 532  
+- **Поля:**  
+  - `image` — изображение (datasets.Image / Pillow)  
+  - `text` — транскрипция  
+  - `dataset` — источник  
+  - `split` — итоговый сплит (train/test)  
+  - `source_split` — сплит в исходном датасете (если был)
+
+---
+
+## Источники данных
+
+| Dataset | Samples | Comment | Link |
+|--------|---------|---------|---------|
+| cyrillic-handwriting-dataset | 20 000 | Подвыборка | https://www.kaggle.com/datasets/constantinwerner/cyrillic-handwriting-dataset |
+| handwritten_ru_letters | 5 000 | Подвыборка | https://www.kaggle.com/datasets/olgabelitskaya/handwritten-russian-letters |
+| comnist | 5 000 | Подвыборка | https://www.kaggle.com/datasets/gregvial/comnist |
+| synthetic_cyrillic_large_00_02 | 5 000 | Подвыборка из первой папки | https://huggingface.co/datasets/pumb-ai/synthetic-cyrillic-large |
+| school_notebooks | 1 857 | Взят полностью | https://huggingface.co/datasets/ai-forever/school_notebooks_RU/tree/main |
+| HWR200 | 816 | Взяты папки 0-4 | https://huggingface.co/datasets/AntiplagiatCompany/HWR200 |
+| handwritten_essay | 158 | Взят полностью | https://data.mendeley.com/datasets/vs44v8r3nf/1 |
+
+---
+
+## Правила формирования train/test
+
+- Сохраняем исходные сплиты: handwritten_essay (train/test), cyrillic-handwriting-dataset (train/test), school_notebooks (val объединён в test).  
+- HWR200: папка `4` → test, остальные папки → train.  
+- comnist, handwritten_ru_letters, synthetic_cyrillic_large_00_02: случайное разбиение 70/30 (сид 42).  
+`split` хранит итоговое разбиение, `source_split` — исходное.
+
+---
+
+## Статистика текста
+
+- **Min длина:** 1 символ  
+- **Max длина:** 3 730 символов  
+- **Средняя:** 87.1  
+- **Медиана:** 7  
+
+---
+
+## Пример записи
+
+```json
+{
+  "image": "<image_bytes>",
+  "text": "пример",
+  "dataset": "cyrillic-handwriting-dataset",
+  "split": "train",
+  "source_split": "train"
+}
+```
+
+---
+
+## Как скачать с HF
+
+1. `pip install -U datasets huggingface_hub`
+2. Загрузить публичный датасет:
+   ```python
+   from datasets import load_dataset
+
+   ds_dict = load_dataset("Timka28/cyrillic_small") 
+   # или
+   ds_train = load_dataset("Timka28/cyrillic_small", split="train")
+   ds_test = load_dataset("Timka28/cyrillic_small", split="test")
+   ```
+Доступ открыт публично.
+
+</details>
+
+
+<details>
+  <summary><b><h2> Image Augmentation Pipeline (OCR / Handwritten Text) </h2></b></summary>
 
 ## Введение
 
@@ -386,3 +488,11 @@ BadPhotoCopyAugmentation(
 ---
 
 > Документация ориентирована на задачи OCR и распознавания рукописного текста.
+
+</details>
+
+
+<details>
+<summary><b><h2> Models </h2></b></summary>
+
+</details>
