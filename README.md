@@ -495,4 +495,31 @@ BadPhotoCopyAugmentation(
 <details>
 <summary><b><h2> Models </h2></b></summary>
 
+## Методика экспериментов
+
+### Файнтюнинг TrOCR-small
+
+В ноутбуке `trocr_small.ipynb` выполнен файнтюнинг модели `microsoft/trocr-small-handwritten` на датасете `Timka28/cyrillic_small`: внутри `train` сделан сплит 80/20 (`seed=42`), изображения приводятся к RGB и проходят on-the-fly аугментации с `p_aug=0.5` (bad_photo, dilation, elastic_transform, erosion, grid_distortion, motion_blur, scale, scribbles). Тексты токенизируются с `MAX_TARGET_LENGTH=512`, обучение запускается через `Seq2SeqTrainer` в `fp16` при `lr=5e-5`, `epochs=15`, `batch_size=8`, `generation_max_length=512`. Протестирована `microsoft/trocr-small-handwritten`. 
+
+### Бенчмарк TrOCR (page-level)
+
+В ноутбуке `trocr_cyrillic (1).ipynb` реализован page-level бенчмарк на `Timka28/cyrillic` (`test`): изображения приводятся к RGB, при необходимости применяется `crop_ink`, после чего страница сегментируется на строки через бинаризацию и горизонтальную проекцию; строки распознаются батчами и склеиваются в текст страницы. Инференс выполняется с `num_beams=1`, `max_new_tokens=64`, `fp16` на GPU при наличии; метрики CER/WER считаются после нормализации пробелов, скорость фиксируется как `page_per_sec`. Протестированы `cyrillic-trocr/trocr-handwritten-cyrillic`, `kazars24/trocr-base-handwritten-ru`, `akushsky/trocr-large-handwritten-ru`.
+
+## Результаты тестирования
+
+| Модель | Настройки модели | CER | WER | `page_per_sec` |
+|---|---|---|---|---|
+| microsoft/trocr-small-handwritten | 0.06B | 0.81 | 0.99 | 2.143 |
+| cyrillic-trocr/trocr-handwritten-cyrillic | 0.3B | 0.285 | 0.579 | 0.143 |
+| kazars24/trocr-base-handwritten-ru | 0.3B | 0.617 | 0.938 | 0.176 |
+| akushsky/trocr-large-handwritten-ru | 0.6B | 0.985 | 1.25 | 0.159 |
+
 </details>
+
+## Общие выводы по работе
+
+- Собран и опубликован датасет рукописной кириллицы с воспроизводимыми правилами сплитов; он пригоден для обучения и объективного сравнения моделей.
+- Реализован модульный пайплайн аугментаций, совместимый с HF datasets и torchvision, что упрощает эксперименты и имитацию реальных артефактов сканов.
+- Для page-level HTR показан рабочий подход: сегментация страницы на строки, построчный инференс и сборка в текст страницы с оценкой CER/WER.
+- Лучшее качество по CER/WER показывает `cyrillic-trocr/trocr-handwritten-cyrillic`, но это самая медленная модель по `page_per_sec`.
+- `microsoft/trocr-small-handwritten` работает заметно быстрее остальных, но качество распознавания существенно хуже; рост размера модели не гарантирует улучшения метрик.
