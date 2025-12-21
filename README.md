@@ -39,12 +39,11 @@
 
 ## Технологии
 
-- **ML/HTR**: `torch`, `torchvision`, `tensorflow`, `keras`
+- **ML/HTR**: `torch`, `torchvision`, `tensorflow`
 - **Аугментации**: `albumentations`, `augraphy`
 - **CV**: `opencv-python`, `scikit-image`
 - **Данные и метрики**: `numpy`, `pandas`, `scipy`, `scikit-learn`
-- **Эксперименты**: `mlflow`, `dvc`
-- **Работа с датасетами**: `datasets` (используется в ноутбуках/примерах)
+- **Работа с датасетами**: `datasets`
 
 ---
 
