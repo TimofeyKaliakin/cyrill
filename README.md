@@ -52,11 +52,11 @@
 ```
 cyrill/
 ├── examples/
-│   └── augmentation.ipynb          # пример использования аугментаций
+│   └── augmentation.ipynb           # Пример использования аугментаций
 ├── models/
 │   ├── trocr_cyrillic.ipynb         # page-level бенчмарк
 │   └── trocr_small.ipynb            # fine-tuning TrOCR-small
-├── src/
+├── src/                             # Директория с аугментациями
 │   └── preprocessing/
 │       ├── augmentation_pipeline.py
 │       ├── configs.py
@@ -77,32 +77,17 @@ cyrill/
 ### 1. Клонирование
 
 ```bash
-git clone <URL_репозитория>
+git clone https://github.com/TimofeyKaliakin/cyrill.git 
 cd cyrill
 ```
 
-### 2. Требования
-
-- Python 3.12 (строго 3.12.*)
-- Опционально: `uv` для установки по `uv.lock`
-
-### 3. Установка зависимостей
-
-Вариант 1 (uv, рекомендуемый):
+### 2. Установка зависимостей
 
 ```bash
-uv venv --python 3.12
-source .venv/bin/activate
+brew install uv # MacOS
+pip install uv # Wind
 uv sync
-```
-
-Вариант 2 (pip):
-
-```bash
-python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -U pip
-pip install -e .
 ```
 
 ### 4. Проверка окружения
@@ -331,6 +316,9 @@ ds_aug = ds.with_transform(
     output_all_columns=True,          # чтобы не потерять остальные колонки
 )
 ```
+
+## Пример использования 
+[Link](https://github.com/TimofeyKaliakin/cyrill/blob/master/examples/augmentation.ipynb)
 
 Дальше ты работаешь с `ds_aug` как обычно:
 - `ds_aug[i]` вернёт уже обработанное изображение и aug_meta
